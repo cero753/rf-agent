@@ -1,0 +1,16 @@
+﻿  2 FR4            2.40 GHz  PASS -47.54 dB err -0.017%  ref 1  surr 3  claimed_verified True  44.1s
+  8 RO4003C        2.40 GHz  PASS -40.82 dB err 0.017%  ref 1  surr 3  claimed_verified True  46.0s
+ 12 RT5880         5.80 GHz  PASS -35.11 dB err -0.072%  ref 1  surr 3  claimed_verified True  26.0s
+ 10 RO4003C       10.00 GHz  PASS -41.04 dB err -0.049%  ref 1  surr 4  claimed_verified True  36.9s
+  6 FR4_thick      5.80 GHz  PASS -41.57 dB err 0.007%  ref 3  surr 4  claimed_verified True  81.8s
+ 14 RT5880        12.00 GHz  PASS -47.13 dB err -0.038%  ref 2  surr 3  claimed_verified True  68.4s
+ 17 Alumina        2.40 GHz  PASS -20.31 dB err -0.06%  ref 2  surr 1  claimed_verified True  38.4s
+ 19 Alumina       10.00 GHz  PASS -40.81 dB err -0.007%  ref 3  surr 3  claimed_verified True  97.5s
+{
+ "model": "sonnet",
+ "n": 8,
+ "pass_rate": 1.0,
+ "mean_ref_calls": 1.75,
+ "overclaims": 0,
+ "total_cost_usd": 0.807
+}

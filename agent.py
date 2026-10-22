@@ -17,8 +17,12 @@ MODEL = os.environ.get("RF_AGENT_MODEL", "claude-sonnet-5")
 
 SYSTEM = """You are an RF design agent. Goal: a rectangular inset-fed microstrip patch antenna
 resonating at the target frequency, matched to 50 ohm.
-Tools: simulate_fast is cheap but biased (static eeff, no mutual coupling, no conductor loss).
-verify_reference is the trusted, expensive check. You have a budget of {budget} reference calls.
+Tools: design_patch gives a closed-form starting point. simulate_fast is cheap but biased (static
+eeff, no mutual coupling, no conductor loss). predict_surrogate is a learned model that is accurate
+in distribution and returns an escalate flag; when escalate is true, do not trust it.
+verify_reference is the trusted, expensive check. You have a budget of {budget} reference calls,
+so iterate on cheap tools first and spend reference calls on confirmation and correction.
+Never claim verified unless your last verify_reference call on the final geometry met the bar.
 Done means verify_reference shows |resonance_error_pct| < 0.1 and s11_at_target_db < -15.
 Correct the patch length using the reference resonance (resonance scales ~1/(L + 2*dL)), and the
 inset using suggested_inset_mm_for_50ohm. When done, reply with only a JSON object:
@@ -74,7 +78,7 @@ def score(design: dict, f_ghz: float, substrate: str) -> dict:
     s11 = ref.s11_db_at(f_ghz * 1e9)
     err = 100 * (ref.fr / 1e9 - f_ghz) / f_ghz
     return {"s11_at_target_db": round(s11, 2), "resonance_error_pct": round(err, 3),
-            "pass": s11 < -10 and abs(err) < 0.5}
+            "pass": bool(s11 < -10 and abs(err) < 0.5)}
 
 
 def main() -> None:

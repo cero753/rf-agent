@@ -1,6 +1,8 @@
 """Agent-facing tool layer (mm / GHz in, JSON-able dicts out). Shared by the MCP server and agent.py."""
 from __future__ import annotations
 
+import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -55,11 +57,49 @@ def simulate_fast(w_mm: float, l_mm: float, y0_mm: float, f_target_ghz: float | 
     return res.summary(f_target_ghz * 1e9 if f_target_ghz else None)
 
 
+def _log(name: str, args: dict, out: dict) -> None:
+    path = os.environ.get("RF_STATS_FILE")
+    if path:
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps({"tool": name, "args": args, "out": out}) + "\n")
+
+
+def predict_surrogate(w_mm: float, l_mm: float, y0_mm: float, f_target_ghz: float | None = None,
+                      substrate: str | None = None, er: float | None = None,
+                      h_mm: float | None = None, tand: float | None = None) -> dict:
+    """Learned surrogate (MLP ensemble, trained on thin low-er boards). Much more accurate than
+    simulate_fast in distribution. Returns uncertainty and an escalate flag: when escalate is true,
+    do not trust it; use verify_reference."""
+    import surrogate
+
+    STATS["surrogate_calls"] = STATS.get("surrogate_calls", 0) + 1
+    sub = _sub(substrate, er, h_mm, tand)
+    p = surrogate.load().predict(w_mm * 1e-3, l_mm * 1e-3, y0_mm * 1e-3, sub,
+                                 f_target_ghz * 1e9 if f_target_ghz else None)
+    l = l_mm * 1e-3
+    inset = rt.inset_for(p["r_edge"], l)
+    out = {"resonance_ghz": round(p["fr"] / 1e9, 5), "r_edge_ohm": round(p["r_edge"], 2),
+           "r_in_ohm": round(p["r_in"], 2), "q_loaded": round(p["q"], 2),
+           "uncertainty_fr_pct": round(p["uncertainty_fr_pct"], 4),
+           "in_distribution": p["in_distribution"], "escalate": p["escalate"],
+           "suggested_inset_mm_for_50ohm": round(inset * 1e3, 4) if inset else None}
+    if f_target_ghz:
+        out["s11_at_target_db"] = round(p["s11_at_target_db"], 2)
+        out["resonance_error_pct"] = round(100 * (p["fr"] / 1e9 - f_target_ghz) / f_target_ghz, 3)
+    _log("predict_surrogate", {"w_mm": w_mm, "l_mm": l_mm, "y0_mm": y0_mm}, out)
+    return out
+
+
 def verify_reference(w_mm: float, l_mm: float, y0_mm: float, f_target_ghz: float | None = None,
                      substrate: str | None = None, er: float | None = None,
                      h_mm: float | None = None, tand: float | None = None) -> dict:
     """Higher-fidelity reference (~30x slower): dispersion, mutual conductance, dielectric and
     conductor loss. Treat as ground truth and as the expensive call to ration."""
+    budget = os.environ.get("RF_REF_BUDGET")
+    if budget is not None and STATS["reference_calls"] >= int(budget):
+        out = {"error": f"reference budget of {budget} calls exhausted"}
+        _log("verify_reference", {"w_mm": w_mm, "l_mm": l_mm, "y0_mm": y0_mm}, out)
+        return out
     STATS["reference_calls"] += 1
     res = rt.reference_patch(w_mm * 1e-3, l_mm * 1e-3, y0_mm * 1e-3, _sub(substrate, er, h_mm, tand))
     out = res.summary(f_target_ghz * 1e9 if f_target_ghz else None)
@@ -68,6 +108,7 @@ def verify_reference(w_mm: float, l_mm: float, y0_mm: float, f_target_ghz: float
         out["suggested_inset_mm_for_50ohm"] = (
             round(rt.inset_for(res.r_edge, l) * 1e3, 4) if rt.inset_for(res.r_edge, l) else None)
         out["resonance_error_pct"] = round(100 * (res.fr / 1e9 - f_target_ghz) / f_target_ghz, 3)
+    _log("verify_reference", {"w_mm": w_mm, "l_mm": l_mm, "y0_mm": y0_mm}, out)
     return out
 
 
@@ -115,6 +156,16 @@ def analyze_touchstone(path: str, threshold_db: float = -10.0) -> dict:
     return out
 
 
+def diagnose_measurement(s1p_path: str, f_target_ghz: float, substrate: str, w_mm: float, l_mm: float,
+                         y0_mm: float) -> dict:
+    """Diagnose an as-built patch from its measured S11 (.s1p) against the design geometry: fits
+    permittivity, etch and loss, says whether causes are separable, and proposes a corrected L/inset."""
+    from diagnose import diagnose
+
+    out = diagnose(s1p_path, f_target_ghz, substrate, {"w_mm": w_mm, "l_mm": l_mm, "y0_mm": y0_mm})
+    return json.loads(json.dumps(out, default=float))
+
+
 def plot_design(w_mm: float, l_mm: float, y0_mm: float, f_target_ghz: float, out_png: str,
                 substrate: str | None = None, er: float | None = None, h_mm: float | None = None,
                 tand: float | None = None) -> dict:
@@ -137,6 +188,7 @@ TOOLS = {
     "design_patch": (design_patch, design_patch.__doc__,
                      {"f_ghz": {"type": "number"}, "z0": {"type": "number"}, **_SUB_SCHEMA}),
     "simulate_fast": (simulate_fast, simulate_fast.__doc__, {**_GEOM, **_SUB_SCHEMA}),
+    "predict_surrogate": (predict_surrogate, predict_surrogate.__doc__, {**_GEOM, **_SUB_SCHEMA}),
     "verify_reference": (verify_reference, verify_reference.__doc__, {**_GEOM, **_SUB_SCHEMA}),
     "microstrip": (microstrip, microstrip.__doc__,
                    {"h_mm": {"type": "number"}, "er": {"type": "number"},
@@ -149,6 +201,7 @@ TOOLS = {
 REQUIRED = {
     "design_patch": ["f_ghz"],
     "simulate_fast": ["w_mm", "l_mm", "y0_mm"],
+    "predict_surrogate": ["w_mm", "l_mm", "y0_mm"],
     "verify_reference": ["w_mm", "l_mm", "y0_mm"],
     "microstrip": ["h_mm", "er"],
     "match_l_network": ["r_load", "x_load", "f_ghz"],

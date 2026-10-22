@@ -209,6 +209,12 @@ def open_loop_design(f_hz: float, sub: Substrate, z0: float = 50.0) -> dict:
     return {"w": w, "l": l, "y0": y0, "fast_calls": 2, "ref_calls": 0}
 
 
+def correct_length(w: float, l: float, fr_seen: float, f_target: float, sub: Substrate) -> float:
+    """Resonance scales ~1/(L + 2*dL): rescale the electrical length to move fr_seen onto f_target."""
+    dl = patch_delta_l(w, sub.h, _eeff_dispersive(w, sub.h, sub.er, fr_seen))
+    return (l + 2 * dl) * (fr_seen / f_target) - 2 * dl
+
+
 def closed_loop_design(f_hz: float, sub: Substrate, z0: float = 50.0,
                        tol_f: float = 1e-3, tol_r: float = 1.0, max_iter: int = 8) -> dict:
     """Surrogate proposes, reference verifies, correct L and inset, repeat."""
@@ -224,9 +230,7 @@ def closed_loop_design(f_hz: float, sub: Substrate, z0: float = 50.0,
         converged = abs(f_err) < tol_f and abs(ref.r_in - z0) < tol_r
         if converged or (abs(f_err) < tol_f and inset_for(ref.r_edge, l, z0) is None):
             break
-        e = _eeff_dispersive(w, sub.h, sub.er, ref.fr)
-        dl = patch_delta_l(w, sub.h, e)
-        l = (l + 2 * dl) * (ref.fr / f_hz) - 2 * dl
+        l = correct_length(w, l, ref.fr, f_hz, sub)
         ref_edge = reference_patch(w, l, 0.0, sub, z0)
         ref_calls += 1
         y0 = inset_for(ref_edge.r_edge, l, z0) or 0.0

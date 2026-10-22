@@ -2,6 +2,7 @@ numpy
 scipy
 scikit-rf
 matplotlib
+scikit-learn
 mcp>=2
 anthropic
 pytest

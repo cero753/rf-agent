@@ -7,8 +7,8 @@ import tools_api as t
 mcp = MCPServer("rf-agent", instructions="Use simulate_fast inside your design loop; "
                 "confirm with verify_reference before claiming a design works.")
 
-for fn in (t.list_substrates, t.design_patch, t.simulate_fast, t.verify_reference,
-           t.microstrip, t.match_l_network, t.analyze_touchstone, t.plot_design):
+for fn in (t.list_substrates, t.design_patch, t.simulate_fast, t.predict_surrogate, t.verify_reference,
+           t.microstrip, t.match_l_network, t.analyze_touchstone, t.diagnose_measurement, t.plot_design):
     mcp.tool()(fn)
 
 

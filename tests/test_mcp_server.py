@@ -22,5 +22,5 @@ async def _roundtrip():
 def test_server_lists_tools_and_designs():
     names, design = anyio.run(_roundtrip)
     assert {"design_patch", "simulate_fast", "verify_reference", "analyze_touchstone",
-            "match_l_network", "call_stats"} <= names
+            "match_l_network", "call_stats", "predict_surrogate", "diagnose_measurement"} <= names
     assert 37 < design["w_mm"] < 39

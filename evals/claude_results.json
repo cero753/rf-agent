@@ -1,0 +1,204 @@
+{
+ "summary": {
+  "model": "sonnet",
+  "n": 8,
+  "pass_rate": 1.0,
+  "mean_ref_calls": 1.75,
+  "overclaims": 0,
+  "total_cost_usd": 0.807
+ },
+ "rows": [
+  {
+   "id": 2,
+   "f_ghz": 2.4,
+   "substrate": "FR4",
+   "seconds": 44.1,
+   "turns": 10,
+   "cost_usd": 0.07946199999999999,
+   "ref_calls": 1,
+   "surrogate_calls": 3,
+   "budget_refusals": 0,
+   "claimed": {
+    "w_mm": 38.01,
+    "l_mm": 28.7804,
+    "y0_mm": 9.2031,
+    "verified": true,
+    "notes": "Reference check at 2.4 GHz on FR4 confirms resonance error -0.017% and S11 -47.54 dB, well within spec."
+   },
+   "graded": {
+    "s11_at_target_db": -47.54,
+    "resonance_error_pct": -0.017,
+    "pass": true
+   },
+   "overclaim": false
+  },
+  {
+   "id": 8,
+   "f_ghz": 2.4,
+   "substrate": "RO4003C",
+   "seconds": 46.0,
+   "turns": 11,
+   "cost_usd": 0.0999294,
+   "ref_calls": 1,
+   "surrogate_calls": 3,
+   "budget_refusals": 0,
+   "claimed": {
+    "w_mm": 41.4084,
+    "l_mm": 32.6527,
+    "y0_mm": 11.1488,
+    "verified": true,
+    "notes": "Length corrected via surrogate resonance scaling and inset tuned to 50 ohm; reference verify confirmed 0.017% resonance error and -40.8 dB return loss at 2.4 GHz on RO4003C."
+   },
+   "graded": {
+    "s11_at_target_db": -40.82,
+    "resonance_error_pct": 0.017,
+    "pass": true
+   },
+   "overclaim": false
+  },
+  {
+   "id": 12,
+   "f_ghz": 5.8,
+   "substrate": "RT5880",
+   "seconds": 26.0,
+   "turns": 9,
+   "cost_usd": 0.0656784,
+   "ref_calls": 1,
+   "surrogate_calls": 3,
+   "budget_refusals": 0,
+   "claimed": {
+    "w_mm": 20.4316,
+    "l_mm": 16.8085,
+    "y0_mm": 5.8268,
+    "verified": true,
+    "notes": "Reference verification at 5.8 GHz shows -0.072% resonance error and -35.1 dB return loss, meeting both bars."
+   },
+   "graded": {
+    "s11_at_target_db": -35.11,
+    "resonance_error_pct": -0.072,
+    "pass": true
+   },
+   "overclaim": false
+  },
+  {
+   "id": 10,
+   "f_ghz": 10.0,
+   "substrate": "RO4003C",
+   "seconds": 36.9,
+   "turns": 9,
+   "cost_usd": 0.07310580000000001,
+   "ref_calls": 1,
+   "surrogate_calls": 4,
+   "budget_refusals": 0,
+   "claimed": {
+    "w_mm": 9.938,
+    "l_mm": 7.368,
+    "y0_mm": 2.623,
+    "verified": true,
+    "notes": "Reference verification confirms resonance error -0.049% and s11 -41.04 dB at 10.0 GHz on RO4003C, meeting both bars."
+   },
+   "graded": {
+    "s11_at_target_db": -41.04,
+    "resonance_error_pct": -0.049,
+    "pass": true
+   },
+   "overclaim": false
+  },
+  {
+   "id": 6,
+   "f_ghz": 5.8,
+   "substrate": "FR4_thick",
+   "seconds": 81.8,
+   "turns": 17,
+   "cost_usd": 0.153816,
+   "ref_calls": 3,
+   "surrogate_calls": 4,
+   "budget_refusals": 0,
+   "claimed": {
+    "w_mm": 15.7283,
+    "l_mm": 9.9042,
+    "y0_mm": 3.5211,
+    "verified": true,
+    "notes": "Reference verification at 5.8 GHz on FR4_thick confirms resonance_error_pct=0.007% and s11=-41.57 dB, meeting both the resonance and matching criteria."
+   },
+   "graded": {
+    "s11_at_target_db": -41.57,
+    "resonance_error_pct": 0.007,
+    "pass": true
+   },
+   "overclaim": false
+  },
+  {
+   "id": 14,
+   "f_ghz": 12.0,
+   "substrate": "RT5880",
+   "seconds": 68.4,
+   "turns": 11,
+   "cost_usd": 0.0957506,
+   "ref_calls": 2,
+   "surrogate_calls": 3,
+   "budget_refusals": 0,
+   "claimed": {
+    "w_mm": 9.6509,
+    "l_mm": 7.7572,
+    "y0_mm": 2.7029,
+    "verified": true,
+    "notes": "Reference verification at 12.0 GHz on RT5880 shows resonance error -0.038% and S11 -47.13 dB, meeting the match/resonance criteria."
+   },
+   "graded": {
+    "s11_at_target_db": -47.13,
+    "resonance_error_pct": -0.038,
+    "pass": true
+   },
+   "overclaim": false
+  },
+  {
+   "id": 17,
+   "f_ghz": 2.4,
+   "substrate": "Alumina",
+   "seconds": 38.4,
+   "turns": 8,
+   "cost_usd": 0.06919339999999999,
+   "ref_calls": 2,
+   "surrogate_calls": 1,
+   "budget_refusals": 0,
+   "claimed": {
+    "w_mm": 26.8771,
+    "l_mm": 19.6504,
+    "y0_mm": 7.7452,
+    "verified": true,
+    "notes": "Reference verification at 2.4 GHz gave resonance_error_pct=-0.06% and s11=-20.31 dB, meeting both the resonance and match criteria after one length/inset correction from the initial design."
+   },
+   "graded": {
+    "s11_at_target_db": -20.31,
+    "resonance_error_pct": -0.06,
+    "pass": true
+   },
+   "overclaim": false
+  },
+  {
+   "id": 19,
+   "f_ghz": 10.0,
+   "substrate": "Alumina",
+   "seconds": 97.5,
+   "turns": 16,
+   "cost_usd": 0.170155,
+   "ref_calls": 3,
+   "surrogate_calls": 3,
+   "budget_refusals": 0,
+   "claimed": {
+    "w_mm": 6.4505,
+    "l_mm": 4.3893,
+    "y0_mm": 1.7598,
+    "verified": true,
+    "notes": "Reference-verified at 9.99929 GHz (-0.007% error) with s11=-40.81 dB after correcting L via effective-length scaling and inset from suggested_inset_mm_for_50ohm."
+   },
+   "graded": {
+    "s11_at_target_db": -40.81,
+    "resonance_error_pct": -0.007,
+    "pass": true
+   },
+   "overclaim": false
+  }
+ ]
+}

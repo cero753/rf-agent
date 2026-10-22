@@ -1,0 +1,17 @@
+{
+ "fr4_lot": {
+  "er": 4.15,
+  "etch_um": 0.0,
+  "tand": 0.02
+ },
+ "fr4_overetch": {
+  "er": 4.4,
+  "etch_um": 120.0,
+  "tand": 0.02
+ },
+ "fr4_both": {
+  "er": 4.25,
+  "etch_um": 60.0,
+  "tand": 0.025
+ }
+}
