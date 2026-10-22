@@ -1,0 +1,22 @@
+[
+ {"id": 1, "f_ghz": 0.915, "substrate": "FR4"},
+ {"id": 2, "f_ghz": 2.4, "substrate": "FR4"},
+ {"id": 3, "f_ghz": 3.5, "substrate": "FR4"},
+ {"id": 4, "f_ghz": 5.8, "substrate": "FR4"},
+ {"id": 5, "f_ghz": 2.4, "substrate": "FR4_thick"},
+ {"id": 6, "f_ghz": 5.8, "substrate": "FR4_thick"},
+ {"id": 7, "f_ghz": 1.575, "substrate": "RO4003C"},
+ {"id": 8, "f_ghz": 2.4, "substrate": "RO4003C"},
+ {"id": 9, "f_ghz": 5.8, "substrate": "RO4003C"},
+ {"id": 10, "f_ghz": 10.0, "substrate": "RO4003C"},
+ {"id": 11, "f_ghz": 2.4, "substrate": "RT5880"},
+ {"id": 12, "f_ghz": 5.8, "substrate": "RT5880"},
+ {"id": 13, "f_ghz": 10.0, "substrate": "RT5880"},
+ {"id": 14, "f_ghz": 12.0, "substrate": "RT5880"},
+ {"id": 15, "f_ghz": 2.4, "substrate": "RT5880_thick"},
+ {"id": 16, "f_ghz": 5.8, "substrate": "RT5880_thick"},
+ {"id": 17, "f_ghz": 2.4, "substrate": "Alumina"},
+ {"id": 18, "f_ghz": 5.8, "substrate": "Alumina"},
+ {"id": 19, "f_ghz": 10.0, "substrate": "Alumina"},
+ {"id": 20, "f_ghz": 3.5, "substrate": "RO4003C"}
+]

@@ -1,0 +1,8 @@
+numpy
+scipy
+scikit-rf
+matplotlib
+mcp>=2
+anthropic
+pytest
+anyio

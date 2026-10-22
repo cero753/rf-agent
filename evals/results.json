@@ -1,0 +1,391 @@
+{
+ "summary": {
+  "open": 0.0,
+  "closed": 1.0,
+  "mean_abs_fr_drift_pct": 2.455467012547593,
+  "mean_closed_ref_calls": 3.3,
+  "median_speedup_x": 34.02019471472079
+ },
+ "rows": [
+  {
+   "id": 1,
+   "f_ghz": 0.915,
+   "substrate": "FR4",
+   "fr_drift_pct": -0.8660496863209486,
+   "rin_drift_ohm": -24.85772211734516,
+   "speedup": 31.63001568316947,
+   "open": {
+    "s11_at_target_db": -6.57,
+    "resonance_error_pct": -0.866,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -52.76,
+    "resonance_error_pct": -0.007,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 2,
+   "f_ghz": 2.4,
+   "substrate": "FR4",
+   "fr_drift_pct": -2.056386592493614,
+   "rin_drift_ohm": -4.7839265794198695,
+   "speedup": 33.1108942920074,
+   "open": {
+    "s11_at_target_db": -7.18,
+    "resonance_error_pct": -2.056,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -41.93,
+    "resonance_error_pct": -0.037,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 3,
+   "f_ghz": 3.5,
+   "substrate": "FR4",
+   "fr_drift_pct": -2.805187939968859,
+   "rin_drift_ohm": 3.3178136601399473,
+   "speedup": 33.498182343125656,
+   "open": {
+    "s11_at_target_db": -7.09,
+    "resonance_error_pct": -2.805,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -38.98,
+    "resonance_error_pct": -0.064,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 4,
+   "f_ghz": 5.8,
+   "substrate": "FR4",
+   "fr_drift_pct": -4.109423694030417,
+   "rin_drift_ohm": 13.02285905467398,
+   "speedup": 33.75333858344014,
+   "open": {
+    "s11_at_target_db": -7.13,
+    "resonance_error_pct": -4.109,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -67.17,
+    "resonance_error_pct": -0.004,
+    "pass": true
+   },
+   "closed_ref_calls": 5
+  },
+  {
+   "id": 5,
+   "f_ghz": 2.4,
+   "substrate": "FR4_thick",
+   "fr_drift_pct": -3.5796323304977813,
+   "rin_drift_ohm": 9.750972352050098,
+   "speedup": 33.2253312277773,
+   "open": {
+    "s11_at_target_db": -7.07,
+    "resonance_error_pct": -3.58,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -37.14,
+    "resonance_error_pct": -0.098,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 6,
+   "f_ghz": 5.8,
+   "substrate": "FR4_thick",
+   "fr_drift_pct": -6.414223421947232,
+   "rin_drift_ohm": 22.789969998232365,
+   "speedup": 34.616532963760626,
+   "open": {
+    "s11_at_target_db": -7.7,
+    "resonance_error_pct": -6.414,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -65.03,
+    "resonance_error_pct": -0.008,
+    "pass": true
+   },
+   "closed_ref_calls": 5
+  },
+  {
+   "id": 7,
+   "f_ghz": 1.575,
+   "substrate": "RO4003C",
+   "fr_drift_pct": -0.6417686754345666,
+   "rin_drift_ohm": 3.0037128777142357,
+   "speedup": 24.087576151742915,
+   "open": {
+    "s11_at_target_db": -7.68,
+    "resonance_error_pct": -0.642,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -50.78,
+    "resonance_error_pct": -0.004,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 8,
+   "f_ghz": 2.4,
+   "substrate": "RO4003C",
+   "fr_drift_pct": -0.9528865666452249,
+   "rin_drift_ohm": 11.565231068924177,
+   "speedup": 23.98773899428326,
+   "open": {
+    "s11_at_target_db": -7.19,
+    "resonance_error_pct": -0.953,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -46.54,
+    "resonance_error_pct": -0.009,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 9,
+   "f_ghz": 5.8,
+   "substrate": "RO4003C",
+   "fr_drift_pct": -2.079595327744599,
+   "rin_drift_ohm": 23.358280906618546,
+   "speedup": 33.165680681969306,
+   "open": {
+    "s11_at_target_db": -6.89,
+    "resonance_error_pct": -2.08,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -40.09,
+    "resonance_error_pct": -0.037,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 10,
+   "f_ghz": 10.0,
+   "substrate": "RO4003C",
+   "fr_drift_pct": -3.2075563477301023,
+   "rin_drift_ohm": 27.252175875533133,
+   "speedup": 36.51713711416337,
+   "open": {
+    "s11_at_target_db": -7.19,
+    "resonance_error_pct": -3.208,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -37.84,
+    "resonance_error_pct": -0.08,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 11,
+   "f_ghz": 2.4,
+   "substrate": "RT5880",
+   "fr_drift_pct": -0.5614111573623418,
+   "rin_drift_ohm": 20.8517737420986,
+   "speedup": 33.34055505778733,
+   "open": {
+    "s11_at_target_db": -10.88,
+    "resonance_error_pct": -0.561,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -55.78,
+    "resonance_error_pct": -0.003,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 12,
+   "f_ghz": 5.8,
+   "substrate": "RT5880",
+   "fr_drift_pct": -1.254047257083202,
+   "rin_drift_ohm": 27.499099439828846,
+   "speedup": 34.75363565968648,
+   "open": {
+    "s11_at_target_db": -10.25,
+    "resonance_error_pct": -1.254,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -49.47,
+    "resonance_error_pct": -0.015,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 13,
+   "f_ghz": 10.0,
+   "substrate": "RT5880",
+   "fr_drift_pct": -1.9717713301343727,
+   "rin_drift_ohm": 28.47962728640381,
+   "speedup": 38.312256884581736,
+   "open": {
+    "s11_at_target_db": -10.41,
+    "resonance_error_pct": -1.972,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -47.03,
+    "resonance_error_pct": -0.033,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 14,
+   "f_ghz": 12.0,
+   "substrate": "RT5880",
+   "fr_drift_pct": -2.269939541234318,
+   "rin_drift_ohm": 28.386559667017416,
+   "speedup": 34.2491346746021,
+   "open": {
+    "s11_at_target_db": -10.54,
+    "resonance_error_pct": -2.27,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -46.52,
+    "resonance_error_pct": -0.042,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 15,
+   "f_ghz": 2.4,
+   "substrate": "RT5880_thick",
+   "fr_drift_pct": -1.9220267036965684,
+   "rin_drift_ohm": 28.9624131185127,
+   "speedup": 35.27427649608617,
+   "open": {
+    "s11_at_target_db": -10.32,
+    "resonance_error_pct": -1.922,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -47.08,
+    "resonance_error_pct": -0.031,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 16,
+   "f_ghz": 5.8,
+   "substrate": "RT5880_thick",
+   "fr_drift_pct": -3.5778707494133424,
+   "rin_drift_ohm": 26.23335041775045,
+   "speedup": 34.02019471472079,
+   "open": {
+    "s11_at_target_db": -11.43,
+    "resonance_error_pct": -3.578,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -46.31,
+    "resonance_error_pct": -0.082,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 17,
+   "f_ghz": 2.4,
+   "substrate": "Alumina",
+   "fr_drift_pct": -1.5001052423971097,
+   "rin_drift_ohm": 25.786497805287325,
+   "speedup": 36.25892293511569,
+   "open": {
+    "s11_at_target_db": -1.74,
+    "resonance_error_pct": -1.5,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -32.96,
+    "resonance_error_pct": -0.02,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 18,
+   "f_ghz": 5.8,
+   "substrate": "Alumina",
+   "fr_drift_pct": -3.1844711952117892,
+   "rin_drift_ohm": 45.74908308427469,
+   "speedup": 34.9080662959391,
+   "open": {
+    "s11_at_target_db": -1.76,
+    "resonance_error_pct": -3.184,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -26.66,
+    "resonance_error_pct": -0.081,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  },
+  {
+   "id": 19,
+   "f_ghz": 10.0,
+   "substrate": "Alumina",
+   "fr_drift_pct": -4.811965580778542,
+   "rin_drift_ohm": 53.12905261637366,
+   "speedup": 35.51194981098644,
+   "open": {
+    "s11_at_target_db": -2.03,
+    "resonance_error_pct": -4.812,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -54.23,
+    "resonance_error_pct": -0.006,
+    "pass": true
+   },
+   "closed_ref_calls": 5
+  },
+  {
+   "id": 20,
+   "f_ghz": 3.5,
+   "substrate": "RO4003C",
+   "fr_drift_pct": -1.3430209108269282,
+   "rin_drift_ohm": 17.582262931348325,
+   "speedup": 24.157509357894828,
+   "open": {
+    "s11_at_target_db": -6.94,
+    "resonance_error_pct": -1.343,
+    "pass": false
+   },
+   "closed": {
+    "s11_at_target_db": -43.38,
+    "resonance_error_pct": -0.017,
+    "pass": true
+   },
+   "closed_ref_calls": 3
+  }
+ ]
+}
