@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>rf-agent</title>
+<meta name="description" content="Agents designing RF hardware with physics models in the loop: surrogate with escalation, MCP tools, a Claude agent eval, bench diagnosis and manufacturing yield.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #e9eeec; --slide: #f8faf9; --ink: #13201d; --muted: #55655f; --rule: #d3dcd9;
+    --trace: #b86a00; --teal: #0d6b70; --pass: #1f7a4a; --fail: #a33a2a;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0b110f; --slide: #131c19; --ink: #e4ece9; --muted: #9aaba5; --rule: #2a3733;
+            --trace: #f0a640; --teal: #5cc3c8; --pass: #5fc98d; --fail: #ec8a78; color-scheme: dark; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--bg); color: var(--ink); font: 400 16px/1.5 "IBM Plex Sans", system-ui, "Segoe UI", sans-serif; overflow: hidden; }
+  .deck { height: 100%; display: grid; place-items: center; padding: 16px; }
+  .slide {
+    display: none; width: min(100%, calc((100vh - 72px) * 16 / 9)); aspect-ratio: 16 / 9;
+    background: var(--slide); border: 1px solid var(--rule); border-radius: 10px;
+    padding: clamp(18px, 4.2%, 56px); flex-direction: column; gap: clamp(8px, 2.2%, 22px); overflow: hidden;
+    font-size: clamp(11px, 1.55vw, 20px);
+  }
+  .slide.on { display: flex; }
+  h1, h2 { font-family: "Barlow Semi Condensed", "Arial Narrow", sans-serif; margin: 0; line-height: 1.05; text-wrap: balance; }
+  h1 { font-size: 3.6em; font-weight: 700; }
+  h2 { font-size: 2.1em; font-weight: 600; }
+  p { margin: 0; max-width: 62ch; }
+  .eyebrow { font: 500 0.72em/1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--trace); }
+  .lede { font-size: 1.25em; }
+  .muted { color: var(--muted); }
+  .mono, td.n { font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; }
+  .two { display: grid; grid-template-columns: 1fr 1.25fr; gap: 3%; flex: 1; min-height: 0; align-items: center; }
+  .two.even { grid-template-columns: 1fr 1fr; }
+  .stack { display: flex; flex-direction: column; gap: 0.9em; }
+  img { max-width: 100%; max-height: 100%; object-fit: contain; background: #fff; border: 1px solid var(--rule); border-radius: 6px; display: block; }
+  .figwrap { min-height: 0; height: 100%; display: grid; place-items: center; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.82em; }
+  th, td { text-align: left; padding: 0.45em 0.6em; border-bottom: 1px solid var(--rule); }
+  th { font: 500 0.78em/1.2 "IBM Plex Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  tr.hi td { background: color-mix(in srgb, var(--trace) 12%, transparent); }
+  .ok { color: var(--pass); font-weight: 600; }
+  .bad { color: var(--fail); font-weight: 600; }
+  .big { font: 500 3.2em/1 "IBM Plex Mono", monospace; color: var(--trace); }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; margin-top: auto; }
+  .stats div { background: var(--slide); padding: 0.8em 1em; display: grid; gap: 0.25em; }
+  .stats b { font: 500 1.5em/1 "IBM Plex Mono", monospace; }
+  .stats span { font-size: 0.78em; color: var(--muted); line-height: 1.3; }
+  pre { margin: 0; font: 0.74em/1.55 "IBM Plex Mono", monospace; background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 1em 1.2em; overflow: hidden; white-space: pre; }
+  ul { margin: 0; padding-left: 1.1em; display: grid; gap: 0.45em; }
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; }
+  .cards div { border: 1px solid var(--rule); border-radius: 8px; padding: 0.9em; display: grid; gap: 0.35em; align-content: start; }
+  .cards b { font-family: "Barlow Semi Condensed", sans-serif; font-size: 1.25em; }
+  .cards span { font-size: 0.82em; color: var(--muted); }
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; gap: 14px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); font: 0.8rem "IBM Plex Mono", monospace; color: var(--muted); }
+  .bar button { font: inherit; color: var(--ink); background: var(--slide); border: 1px solid var(--rule); border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+  .bar button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .bar a { color: var(--teal); }
+  @media (max-width: 760px), (orientation: portrait) {
+    body { overflow: auto; }
+    .deck { display: block; height: auto; padding-bottom: 72px; }
+    .slide { display: flex !important; width: 100%; aspect-ratio: auto; margin-bottom: 16px; font-size: 15px; }
+    .two, .two.even, .cards, .stats { grid-template-columns: 1fr; }
+    h1 { font-size: 2.6em; }
+    .bar { display: none; }
+    pre { overflow-x: auto; }
+  }
+  @media (prefers-reduced-motion: no-preference) { .slide.on { animation: in .25s ease-out; } @keyframes in { from { opacity: .4; } to { opacity: 1; } } }
+</style>
+</head>
+<body>
+<main class="deck" id="deck">
+
+<section class="slide">
+  <span class="eyebrow">Agents × electromagnetics</span>
+  <h1>rf-agent</h1>
+  <p class="lede">An AI agent designs patch antennas with physics models in its loop. When should it trust the fast model, when should it pay for the solver, and how do we keep it honest once the board is built?</p>
+  <p class="muted">Kartik Bhardwaj · AI engineer · <span class="mono">github.com/cero753/rf-agent</span></p>
+  <div class="stats">
+    <div><b>0 → 20/20</b><span>designs meeting spec, trusting the fast model vs verify-and-correct</span></div>
+    <div><b>0.012%</b><span>learned surrogate resonance error in distribution</span></div>
+    <div><b>8/8 · 0</b><span>Claude agent over MCP: passes and overclaims</span></div>
+    <div><b>60%</b><span>yield of a high-Q design that was perfect in simulation</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">The setup</span>
+  <h2>Cheap predictions, expensive confirmation, independent grading</h2>
+<pre>        design_patch ─► predict_surrogate (µs, with uncertainty) ─ escalate? ─► verify_reference (budgeted)
+agent ◄─────────────────────────── MCP tools ──────────────────────────────────────────┘
+        analyze_touchstone / diagnose_measurement ◄── measured .s1p from the bench
+        grader re-runs the reference on every final answer, whatever the agent claims</pre>
+  <div class="cards">
+    <div><b>Fast model</b><span>Transmission-line patch model. ~30 µs. Static permittivity, no mutual coupling, no conductor loss.</span></div>
+    <div><b>Reference</b><span>Adds dispersion, exact edge and mutual conductance, dielectric and conductor loss. Stands in for full-wave.</span></div>
+    <div><b>Surrogate</b><span>5-MLP ensemble learning the fast-to-reference correction. Ensemble spread is the uncertainty.</span></div>
+    <div><b>Agent</b><span>Claude Code headless. Only MCP tools, a 6-call solver budget, every call logged.</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">01 · Drift</span>
+  <div class="two">
+    <div class="stack">
+      <h2>A 2.5% error misses the band</h2>
+      <p>The fast model is off by 2.5% in resonance on average, up to 6.4% on thick FR-4 at 5.8 GHz.</p>
+      <p>A patch with loaded Q near 20 has about 3% bandwidth. Trusting the fast model gets <span class="bad">0 of 20</span> designs to spec; most land near −7 dB.</p>
+      <p class="muted">Drift grows with frequency, thickness and permittivity: exactly where a model should say it's unsure.</p>
+    </div>
+    <div class="figwrap"><img src="img/drift.png" alt="Resonance drift by substrate and frequency"></div>
+  </div>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">02 · Closed loop</span>
+  <div class="two">
+    <div class="stack">
+      <h2>Fast model proposes, reference corrects</h2>
+      <p>Resonance scales with 1/(L + 2ΔL), so the correction is physical, not a blind search. Converges in 2–3 iterations.</p>
+      <p>2.4 GHz on FR-4: −7.2 dB → <span class="ok">−41.9 dB</span> with 3 reference calls. <span class="ok">20 / 20</span> targets pass.</p>
+      <p class="muted">On the final geometry the fast model still predicts 2.45 GHz. The reference lands on 2.400 GHz.</p>
+    </div>
+    <div class="figwrap"><img src="img/design.png" alt="S11 and Smith chart, fast model vs reference"></div>
+  </div>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">03 · Learned surrogate</span>
+  <div class="two">
+    <div class="stack">
+      <h2>Accurate where trained, and it knows where it isn't</h2>
+      <p>Residual learning on dimensionless features (h/λ, W/h, εr, tanδ). Trained on 5,000 reference runs, thin low-εr boards only.</p>
+      <table>
+        <thead><tr><th>Region</th><th>Surrogate</th><th>Fast model</th><th>Flagged</th></tr></thead>
+        <tbody>
+          <tr><td>In distribution</td><td class="n">0.012%</td><td class="n">1.78%</td><td class="n">5%</td></tr>
+          <tr><td>Thick / ceramic</td><td class="n">2.4%</td><td class="n">6.4%</td><td class="n">99%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="figwrap"><img src="img/surrogate.png" alt="Surrogate error vs ensemble spread"></div>
+  </div>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">04 · Escalation and a real agent</span>
+  <h2>Same correctness, fewer solver calls</h2>
+  <table>
+    <thead><tr><th>Arm</th><th>Pass</th><th>Solver calls</th></tr></thead>
+    <tbody>
+      <tr><td>Trust fast model</td><td class="n bad">0 / 20</td><td class="n">0</td></tr>
+      <tr><td>Fast proposes, reference verifies and corrects</td><td class="n ok">20 / 20</td><td class="n">3.3</td></tr>
+      <tr><td>Surrogate iterates, escalates when unsure, one sign-off</td><td class="n ok">20 / 20</td><td class="n">2.5</td></tr>
+      <tr class="hi"><td>Claude (Sonnet) over MCP, 6-call budget, 8 targets</td><td class="n ok">8 / 8 · 0 overclaims</td><td class="n">1.75</td></tr>
+    </tbody>
+  </table>
+  <p>The surrogate arm escalated all 7 out-of-distribution targets. Claude trusted the surrogate in distribution, went to the solver when it flagged, and never called a design verified when the grader disagreed.</p>
+  <p class="muted">Claude beat the scripted loop by reading the suggested inset from the same solver call: tool outputs should carry the next action.</p>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">05 · Bench</span>
+  <h2>The board came back off-frequency. Why?</h2>
+  <p>Fit permittivity, over-etch and loss tangent to the measured complex S11. Check whether the causes are separable. Propose the fix.</p>
+  <table>
+    <thead><tr><th>Hidden truth</th><th>Diagnosis</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Laminate lot, εr 4.15 (nominal 4.4)</td><td>εr 4.158; etch-only fits 27× worse; lengthen L 0.87 mm → −43 dB</td><td class="ok">identified</td></tr>
+      <tr><td>Over-etch 120 µm</td><td>εr-only and etch-only fit equally well → measure a reference line on the same panel</td><td style="color:var(--trace);font-weight:600">says ambiguous</td></tr>
+      <tr><td>εr 4.25 and 60 µm over-etch</td><td>εr 4.248 plus over-etch 56 µm</td><td class="ok">identified</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">A copilot that admits what the data can't tell it earns more trust than one that always has an answer.</p>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">06 · Real world over lab</span>
+  <div class="two">
+    <div class="stack">
+      <h2>Perfect on paper, 60% on the panel</h2>
+      <p>500 Monte Carlo builds per design: etch ±50 µm, εr ±0.1, thickness ±5% (2σ).</p>
+      <p>FR-4 designs keep 99–100%. High-Q designs (RO4003C, alumina) drop to <span class="bad">60–65%</span>.</p>
+      <p class="muted">The verification target should carry a yield or bandwidth margin, not only nominal S11.</p>
+    </div>
+    <div class="figwrap"><img src="img/yield.png" alt="Yield vs bandwidth"></div>
+  </div>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">Limits and next steps</span>
+  <h2>What this does not show yet</h2>
+  <div class="two even">
+    <div class="stack">
+      <p><b>Limits</b></p>
+      <ul>
+        <li>The reference is an analytic cavity model, not full-wave.</li>
+        <li>Both models are mine, so the open-loop 0/20 is partly by construction.</li>
+        <li>Bench measurements are synthetic, generated with hidden perturbations.</li>
+        <li>The Claude arm is 8 runs: behaviour, not a benchmark.</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <p><b>Next</b></p>
+      <ul>
+        <li>openEMS (FDTD) behind the same <span class="mono">verify_reference</span> interface.</li>
+        <li>Real VNA captures through <span class="mono">analyze_touchstone</span>.</li>
+        <li>Yield-aware design objective instead of nominal S11.</li>
+        <li>Larger Claude eval with adversarial targets and tighter budgets.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <span class="eyebrow">Run it</span>
+  <h2>Everything reproduces from the repo</h2>
+<pre>pip install -r requirements.txt
+pytest -q                      # 22 tests: Balanis + Pozar worked examples, surrogate, diagnosis, budget, MCP
+python demo.py                 # the whole story, step by step
+python evals/run_evals.py      # open / closed / surrogate arms on 20 targets
+python evals/claude_arm.py     # real Claude agent over MCP
+python diagnose.py data/measured_fr4_lot.s1p
+python server.py               # MCP server for any agent</pre>
+  <p class="muted">github.com/cero753/rf-agent · Balanis ch. 14 · Pozar ch. 3, 5 · Hammerstad 1975 · Getsinger 1973 · deep ensembles (Lakshminarayanan 2017)</p>
+</section>
+
+</main>
+<nav class="bar" aria-label="Slide navigation">
+  <button id="prev" type="button" aria-label="Previous slide">←</button>
+  <span id="count" class="mono">1 / 10</span>
+  <button id="next" type="button" aria-label="Next slide">→</button>
+  <a href="https://github.com/cero753/rf-agent">repo</a>
+</nav>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const count = document.getElementById('count');
+  let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('on', k === i));
+    count.textContent = `${i + 1} / ${slides.length}`;
+    history.replaceState(null, '', `#${i + 1}`);
+  }
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+  let x0 = null;
+  addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+  show(i);
+</script>
+</body>
+</html>

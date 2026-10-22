@@ -1,5 +1,7 @@
 # rf-agent
 
+**Slides:** https://cero753.github.io/rf-agent/ · **Quick tour:** `python demo.py`
+
 An experiment in **agents that design hardware with physics models in the loop**. It covers how much to trust a fast model, when to escalate to an expensive solver, how to keep the agent honest, and what happens once the board is actually built.
 
 The domain is deliberately small (inset-fed rectangular patch antennas). The pieces are the ones a real system needs:
@@ -105,6 +107,7 @@ Narrow-band, high-Q designs that verify perfectly in simulation lose about 40% o
 ## Run it
 ```bash
 pip install -r requirements.txt
+python demo.py                              # 6-step walkthrough (--no-pause, --step N, --claude for a live agent run)
 pytest -q                                   # 22 tests: textbook checks (Balanis, Pozar), surrogate, diagnosis, budget, MCP roundtrip
 python surrogate.py                         # regenerate data, retrain, evals/surrogate.png
 python agent.py --f 2.4 --substrate FR4     # scripted loop (or Claude API loop if ANTHROPIC_API_KEY is set)
