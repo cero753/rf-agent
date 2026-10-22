@@ -29,7 +29,10 @@ The gap between them stands in for the gap between a learned surrogate and a ful
 | Arm | Pass rate (S11 < -10 dB and resonance within 0.5%) | Reference calls |
 |---|---|---|
 | Trust fast model (open loop) | **0 / 20** | 0 |
-| Fast proposes, reference verifies, correct L and inset (closed loop) | **20 / 20** | 3.3 avg |
+| Fast proposes, reference verifies, correct L and inset (scripted closed loop) | **20 / 20** | 3.3 avg |
+| Claude tool-use agent (`--claude`) | wired, not yet evaluated | |
+
+The 0/20 is partly by construction: both models are written here, and the reference is a stand-in for full-wave. What the eval does show is how the loop works mechanically and where drift grows. It does not show that any real surrogate fails.
 
 ![drift](evals/drift.png)
 
@@ -39,7 +42,7 @@ The gap between them stands in for the gap between a learned surrogate and a ful
 
 ## Why this matters for agents
 1. **A fast model is a proposal, not an answer.** An agent that reports the surrogate's number as done will fail quietly on hardware.
-2. **The verifier must be independent.** `score()` re-runs the reference no matter what the agent claims. With Claude enabled, the eval also counts *overclaims* (the agent says verified but the grader fails it).
+2. **The verifier must be independent.** `score()` re-runs the reference no matter what the agent claims. With `--claude`, the eval is built to also count *overclaims* (the agent says verified but the grader fails it). That arm has not been run yet.
 3. **Budget the expensive call.** The agent gets a fixed number of reference calls, which is how you would run a real solver that takes minutes to hours.
 
 ## Run it

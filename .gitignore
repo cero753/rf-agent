@@ -3,3 +3,4 @@ __pycache__/
 .env
 out/design.png
 out/design.s1p
+out/demo.*
